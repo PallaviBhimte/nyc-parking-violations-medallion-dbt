@@ -1,0 +1,47 @@
+# Project description and configuration file for dbt
+name: 'nyc_parking_violations'
+version: '1.0.0'
+config-version: 2
+
+# Profile in profiles.yml used to connect to the database
+profile: 'nyc_parking_violations'
+
+# Folders where dbt looks for each type of file
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Folders removed by `dbt clean`
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Materialization per layer (+ applies to every model in the folder)
+models:
+  nyc_parking_violations:
+    # Example models: not loaded into the database
+    example:
+      +materialized: ephemeral
+    # Bronze: raw data exposed as views
+    bronze:
+      +materialized: view
+    # Silver: intermediate models ephemeral, consumer-facing models as views
+    silver:
+      silver_parking_violation_codes:
+        +materialized: ephemeral
+      silver_parking_violations:
+        +materialized: ephemeral
+      silver_violation_tickets:
+        +materialized: view
+      silver_violation_vehicles:
+        +materialized: view
+    # Gold: metrics stored as tables for dashboards
+    gold:
+      +materialized: table
+
+# Save failing test rows to tables in the database
+tests:
+  +store_failures: true
