@@ -104,6 +104,7 @@ have to already exist in that file.
 ## Project structure
 
 ```
+├── .github/workflows/             # CI: runs dbt against the prod target
 ├── data/                          # source CSVs + DuckDB databases
 ├── nyc_parking_violations/        # the dbt project
 │   ├── models/
